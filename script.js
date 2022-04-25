@@ -28,3 +28,15 @@ function operate(op, num1, num2){
     }
 }
 
+// let button1 = document.getElementById(1);
+
+// button1.addEventListener('click', () => console.log("ONE"));
+
+let buttons = document.querySelectorAll('button');
+
+buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+        //sets message html content to html content of btn
+        document.querySelector(".message").innerHTML = btn.innerHTML;
+    });
+});
