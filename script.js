@@ -15,11 +15,18 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
-    return num1 / num2;
+    if(num2 === 0){
+        return "YOU CAN'T DO THAT";
+    }
+    else{
+        return num1 / num2;
+    }
 }
 
 function operate(num1, op, num2){
     //input needs to be char/string to work in browser console
+    num1 = Number(num1);
+    num2 = Number(num2);
     switch(op){
         case '+': return add(num1, num2);
         break;
@@ -32,19 +39,19 @@ function operate(num1, op, num2){
     }
 }
 
-// let button1 = document.getElementById(1);
-
-// button1.addEventListener('click', () => console.log("ONE"));
 
 let numberButtons = document.querySelectorAll('.keys');
 let opButtons = document.querySelectorAll('.op');
 let equalsButton = document.getElementById('equals');
 let clearButton = document.getElementById('clear');
+let dotbutton = document.getElementById('dotbutton');
 
 
 equalsButton.addEventListener('click', () => {
-    let result = operate(firstNumber, operant, secondNumber);
+    let result = operate(parseFloat(firstNumber), operant, parseFloat(secondNumber));
     console.log(result);
+    document.querySelector(".message").innerHTML = result;
+    dotbutton.removeAttribute('disabled');
 });
 
 clearButton.addEventListener('click', () => {
@@ -52,15 +59,16 @@ clearButton.addEventListener('click', () => {
     secondNumber = 0;
     operant = '';
     document.querySelector(".message").innerHTML = '';
+    dotbutton.removeAttribute('disabled');
 });
 
 numberButtons.forEach(function(btn){
     btn.addEventListener('click', function(){
-        if(operant === ''){
-            firstNumber += btn.innerHTML;
+        if(operant !== '' && firstNumber !== ''){
+            secondNumber += btn.innerHTML;
         }
         else{
-            secondNumber += btn.innerHTML;
+            firstNumber += btn.innerHTML;
         }
         document.querySelector(".message").innerHTML += btn.innerHTML;
         console.log("first number: " + firstNumber);
@@ -70,8 +78,20 @@ numberButtons.forEach(function(btn){
 
 opButtons.forEach(function(btn){
     btn.addEventListener('click', function(){
+        if(operant !== ''){
+            firstNumber = operate(parseFloat(firstNumber), operant, parseFloat(secondNumber));
+            document.querySelector(".message").innerHTML = firstNumber;
+            secondNumber = 0;
+            operant ='';
+        }
         operant = btn.innerHTML;
         document.querySelector(".message").innerHTML += btn.innerHTML;
         console.log(operant);
+        dotbutton.removeAttribute('disabled');
     });
 });
+
+
+document.getElementById('dotbutton').onclick = function() {
+    this.disabled = true;
+}
